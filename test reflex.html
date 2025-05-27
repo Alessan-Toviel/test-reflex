@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Test de Réflexe</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background-color: #222;
+      color: white;
+    }
+    #test-zone {
+      width: 300px;
+      height: 200px;
+      margin: 50px auto;
+      line-height: 200px;
+      font-size: 24px;
+      background-color: #444;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Test de Réflexe</h1>
+  <p>Clique dans la zone dès qu'elle devient <strong>verte</strong> !</p>
+
+  <div id="test-zone">Clique ici pour commencer</div>
+  <div id="result"></div>
+
+  <script>
+    let testZone = document.getElementById('test-zone');
+    let result = document.getElementById('result');
+
+    let waiting = false;
+    let startTime;
+
+    testZone.addEventListener('click', () => {
+      if (!waiting) {
+        result.textContent = "";
+        testZone.style.backgroundColor = "#444";
+        testZone.textContent = "Patiente...";
+        waiting = true;
+
+        let delay = Math.floor(Math.random() * 3000) + 2000; // entre 2 et 5 sec
+
+        setTimeout(() => {
+          testZone.style.backgroundColor = "#2ecc71"; // vert
+          testZone.textContent = "Clique maintenant !";
+          startTime = Date.now();
+          waiting = "ready";
+        }, delay);
+      } else if (waiting === "ready") {
+        let reactionTime = Date.now() - startTime;
+        testZone.textContent = "Clique ici pour recommencer";
+        result.textContent = `Temps de réaction : ${reactionTime} ms`;
+        testZone.style.backgroundColor = "#444";
+        waiting = false;
+      } else {
+        // clic trop tôt
+        testZone.textContent = "Trop tôt ! Clique pour recommencer";
+        result.textContent = "";
+        waiting = false;
+        testZone.style.backgroundColor = "#e74c3c"; // rouge
+      }
+    });
+  </script>
+
+</body>
+</html>
